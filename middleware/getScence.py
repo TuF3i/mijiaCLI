@@ -8,9 +8,8 @@ class getScence():
     def __init__(self, api, console):
         self.api: mijiaAPI = api
         self.console = console
-        self.homesPath = ""
-        self.scencesJSON = ""
-        self.basePath = ""
+        self.homesPath = "data/homes"
+        self.basePath = "data/scences"
 
     def _json_writer(self, path, item):
         with open(path, "w") as file:
@@ -21,6 +20,14 @@ class getScence():
         with open(path, "r") as file:
             res = json.load(file)
         return res
+
+    def _list_subdirectories(self):
+        subdirectories = []
+        for root, dirs, _ in os.walk(self.basePath):
+            for dir_name in dirs:
+                full_path = os.path.join(root, dir_name)
+                subdirectories.append(full_path)
+        return subdirectories
     
     def _getScence_all(self):
         self.path = Path(self.homesPath)
@@ -37,5 +44,11 @@ class getScence():
                     self._json_writer(os.path.join(self.basePath, home_id, "all.json"), scenes)
 
     def _divideScence(self):
-        pass
+        subdirectories = self._list_subdirectories()
+        for subdirectory in subdirectories:
+            scenceAll:list = self._json_reader(os.path.join(subdirectory, "all.json"))["scene_info_list"]
+            for scence in scenceAll:
+                scene_id = scence[scene_id]
+                if not os.path.exists(os.path.join(subdirectory, scene_id + ".json")):
+                    self._json_writer(os.path.join(subdirectory, scene_id + ".json"), scence)
 
