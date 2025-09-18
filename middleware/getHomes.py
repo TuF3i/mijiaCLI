@@ -1,12 +1,13 @@
 import os
+
 from mijiaAPI import mijiaAPI
 
 class getHomes():
     def __init__(self, api, console):
         self.api: mijiaAPI = api
         self.console = console
-        self.homesJSON = ""
-        self.basePath = ""
+        self.homesJSON = "data/homes/homes.json"
+        self.basePath = "data/homes"
 
     def _json_writer(self, path, item):
         with open(path, "w") as file:
@@ -14,10 +15,18 @@ class getHomes():
         return None
 
     def _getHomes_all(self):
-        pass
+        self.homes = api.get_homes_list()
+        self._json_writer(self.homesJSON, homes)
 
     def _divideHomes(self):
-        pass
+        for home in self.homes["homelist"]:
+            homeID = home["id"] + ".json"
+            homeInfo = home
+            homePath = os.path.join(self.basePath, homeID)
+
+            if not os.path.exists(homePath):
+                self._json_writer(homePath, homeInfo)
 
     def getHomes(self):
-        pass
+        self._getHomes_all()
+        self._divideHomes()

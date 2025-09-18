@@ -22,7 +22,7 @@ class getDevices():
         for device in self.devices["list"]:
             devModel = device["model"] + ".json"
             devInfo = device
-            devPath = os.path.join(self.basePath,devModel)
+            devPath = os.path.join(self.basePath, devModel)
 
             if not os.path.exists(devPath):
                 self._json_writer(devPath, devInfo)

@@ -6,8 +6,8 @@ from rich import Console
 class setupEnv():
     def __init__(self):
         self.console = Console()
-        self.api = initAPI(self.console)
-        self.devices = getDevices(self.api, self.console)
+        self.initAPI = initAPI(self.console)
         
     def setup(self):
-        pass
+        self.api = self.initAPI.GetAPI()
+        self.devices = getDevices(self.api, self.console)
